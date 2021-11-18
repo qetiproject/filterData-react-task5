@@ -26,6 +26,9 @@ const App = () => {
 
   const [error, setError] = useState('')
 
+
+  const [currentPage, setCurrentPage] = useState(1);
+
   async function getData ()  {
     try{
       const response = await axios.get('https://api2.myauto.ge/appdata/other_ka.json')
@@ -53,9 +56,9 @@ const App = () => {
     }
   }
 
-  async function getFilteredData ( page, keyword) {
+  async function getFilteredData ( page, keyword, fuelType, gearType, category) {
     try {
-      const response = await axios.get(`https://api2.myauto.ge/ka/products?TypeID=0&Mans=&CurrencyID=3&MileageType=1&page=${page}&Keyword=${keyword}`)
+      const response = await axios.get(`https://api2.myauto.ge/ka/products?TypeID=0&Mans=&CurrencyID=3&MileageType=1&Page=${page}&Keyword=${keyword}&fuelType=${fuelType}&gearType=${gearType}&category=${category}`)
       setFilteredData(response.data.data.items)
       setMeta(response.data.data.meta)
     }
@@ -81,8 +84,11 @@ const App = () => {
   }, [])
 
   const searchData = () => {
-    getFilteredData(5, keyword)
+    getFilteredData(currentPage, keyword, changeFuelTypesValue, changeGearTypeValue, changeCategoryValue)
   }
+
+
+
 
   return (
     <div>
@@ -110,17 +116,21 @@ const App = () => {
         </Container>
       </Form>
     
-      {filteredData.length > 0 ? (
-        <>
+    
+      {/* {filteredData.length > 0 ? ( */}
+        {
           <Pagination
             data={filteredData}
             RenderComponent={FilteredData}
             pageLimit={7}
             dataLimit={meta.per_page}
             meta={meta}
+            setPage={setCurrentPage}
+            curPage={currentPage}
+            searchData={searchData}
           />
-        </>
-      ) : <span>{error}</span>}
+        }
+      {/* ) : <span>{error}</span>} */}
       {/* {
         fuelTypes.length > 0 && (
           <>

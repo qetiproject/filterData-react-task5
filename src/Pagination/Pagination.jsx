@@ -1,37 +1,44 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import './Pagination.css'
 
-const Pagination = ({ data, RenderComponent, pageLimit, dataLimit, meta }) => {
+const Pagination = ({ data, RenderComponent, pageLimit, dataLimit, meta, setPage, curPage, searchData }) => {
 
     const [pages] = useState(Math.round(meta.total/ dataLimit));
-    const [currentPage, setCurrentPage] = useState(1);
+    // const [currentPage, setCurrentPage] = useState(1);
   
     const goToNextPage = () => {
-        setCurrentPage((page) => page + 1);
+        setPage((page) => page + 1);
       }
   
     const goToPreviousPage = () => {
-        setCurrentPage((page) => page - 1);
+        setPage((page) => page - 1);
     }
   
     const changePage = (event) => {
         const pageNumber = Number(event.target.textContent);
-        setCurrentPage(pageNumber);
+        setPage(pageNumber);
     }
   
     const getPaginatedData = () => {
-        const startIndex = currentPage * dataLimit - dataLimit;
+        const startIndex = curPage * dataLimit - dataLimit;
         const endIndex = startIndex + dataLimit;
         return data.slice(startIndex, endIndex);
     };
   
     const getPaginationGroup = () => {
-        let start = Math.floor((currentPage - 1) / pageLimit) * pageLimit;
+        let start = Math.floor((curPage - 1) / pageLimit) * pageLimit;
         return new Array(pageLimit).fill().map((_, idx) => start + idx + 1);
     };
   
+    useEffect(() => {
+      searchData()
+      window.scrollTo({ behavior: 'smooth', top: '0px' });
+
+    }, [curPage]);
+
     return (
       <div className="mt-3 mb-3">
+        {console.log(curPage)}
         <div className="dataContainer">
           {getPaginatedData().map((d, idx) => (
             <RenderComponent key={idx} data={d}/>
@@ -40,7 +47,7 @@ const Pagination = ({ data, RenderComponent, pageLimit, dataLimit, meta }) => {
         <div className="pagination">
           <button
             onClick={goToPreviousPage}
-            className={`prev ${currentPage === 1 ? 'disabled' : ''}`}
+            className={`prev ${curPage === 1 ? 'disabled' : ''}`}
           >
             წინა
           </button>
@@ -48,14 +55,14 @@ const Pagination = ({ data, RenderComponent, pageLimit, dataLimit, meta }) => {
             <button
               key={index}
               onClick={changePage}
-              className={`paginationItem ${currentPage === item ? 'active' : null}`}
+              className={`paginationItem ${curPage === item ? 'active' : null}`}
             >
               <span>{item}</span>
             </button>
           ))}
           <button
             onClick={goToNextPage}
-            className={`next ${currentPage === pages ? 'disabled' : ''}`}
+            className={`next ${curPage === pages ? 'disabled' : ''}`}
           >
             შემდეგი
           </button>
