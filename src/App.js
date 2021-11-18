@@ -24,6 +24,8 @@ const App = () => {
   const [changeCategoryValue, setChangeCategoryValue] = useState(0)
   const [meta, setMeta] = useState({})
 
+  const [error, setError] = useState('')
+
   async function getData ()  {
     try{
       const response = await axios.get('https://api2.myauto.ge/appdata/other_ka.json')
@@ -47,7 +49,7 @@ const App = () => {
       }
     }
     catch(e) {
-      console.log(e)
+      setError(e)
     }
   }
 
@@ -58,7 +60,7 @@ const App = () => {
       setMeta(response.data.data.meta)
     }
     catch(e) {
-        console.log(e)
+        setError(e)
     }
   }
 
@@ -108,18 +110,27 @@ const App = () => {
         </Container>
       </Form>
     
-      {filteredData.length > 0 && (
+      {filteredData.length > 0 ? (
         <>
           <Pagination
             data={filteredData}
             RenderComponent={FilteredData}
-            title="FilteredData"
             pageLimit={7}
             dataLimit={meta.per_page}
             meta={meta}
           />
         </>
-      )}
+      ) : <span>{error}</span>}
+      {/* {
+        fuelTypes.length > 0 && (
+          <>
+            <FilteredData
+              fuelTypeArr={fuelTypes}
+              data={filteredData}
+            />
+          </>
+        )
+      } */}
     </div>
   );
 

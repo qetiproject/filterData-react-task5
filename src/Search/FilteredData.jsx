@@ -1,13 +1,24 @@
 import {Col, Container, Row} from 'react-bootstrap'
 import {Car} from '../Search/search'
+import { useState, useEffect } from 'react';
 
-function FilteredData(props) {
+const FilteredData = (props) => {
     const { 
       prod_year, engine_volume, fuel_type_id, gear_type_id, car_run_km, right_wheel, price_value, currency_id, car_desc 
     } = props.data;
 
     return (
       <Container>
+        {/* {
+          props.fuelTypeArr.map(x => {
+            console.log(props.data.fuel_type_id)
+          //   if(x.fuel_type_id === fuel_type_id) {
+          //     console.log("ggg")
+          //   }
+          // })
+          })
+        
+        } */}
         <Row className="d-flex">
           <Col md={3}>
             <div className="d-flex">
@@ -53,50 +64,3 @@ function FilteredData(props) {
   }
 
 export default FilteredData
-
-// { <Container className="mt-5">
-// <Row>
-//   <Col md={4}>
-//   {
-//     filteredData.map(x => 
-//     {
-//       return <div>
-//         <div className="d-flex">
-//           <Car>
-//             Car Name
-//           </Car>
-//           <p>{x.prod_year} წ.</p>
-//         </div>
-//         <Row>
-//           <Col md={4}>
-//             <div className="d-flex flex-column">
-//               <span>ძრავი</span>
-//               <p>{x.engine_volume/1000} {x.fuel_type_id}</p>
-//             </div>
-//             <div className="d-flex flex-column">
-//               <span>ტრანსმისია</span>
-//               <p>{x.gear_type_id}</p>
-//             </div>
-//            </Col>
-//            <Col>
-//             <div className="d-flex flex-column">
-//               <span>გარბენი</span>
-//               <p>{x.car_run_km} კმ</p>
-//             </div>
-//             <div className="d-flex flex-column">
-//               <span>საჭე</span>
-//               <p>{x.right_wheel} </p>
-//             </div>
-//           </Col>
-//           <Col>
-//             <span>
-//               <b>{x.price_value} price{x.currency_id}</b>
-//             </span>
-//           </Col>
-//         </Row>
-//       </div>
-//     })
-//   }
-// </Col>
-// </Row>
-// </Container> }

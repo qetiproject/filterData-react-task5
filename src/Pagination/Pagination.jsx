@@ -1,20 +1,20 @@
 import { useState } from "react";
 import './Pagination.css'
 
-const Pagination = ({ data, RenderComponent, title, pageLimit, dataLimit, meta }) => {
+const Pagination = ({ data, RenderComponent, pageLimit, dataLimit, meta }) => {
 
     const [pages] = useState(Math.round(meta.total/ dataLimit));
     const [currentPage, setCurrentPage] = useState(1);
   
-    function goToNextPage() {
+    const goToNextPage = () => {
         setCurrentPage((page) => page + 1);
       }
   
-    function goToPreviousPage() {
+    const goToPreviousPage = () => {
         setCurrentPage((page) => page - 1);
     }
   
-    function changePage(event) {
+    const changePage = (event) => {
         const pageNumber = Number(event.target.textContent);
         setCurrentPage(pageNumber);
     }
@@ -31,10 +31,10 @@ const Pagination = ({ data, RenderComponent, title, pageLimit, dataLimit, meta }
     };
   
     return (
-      <div className="mt-3">
+      <div className="mt-3 mb-3">
         <div className="dataContainer">
           {getPaginatedData().map((d, idx) => (
-            <RenderComponent key={idx} data={d} />
+            <RenderComponent key={idx} data={d}/>
           ))}
         </div>
         <div className="pagination">
