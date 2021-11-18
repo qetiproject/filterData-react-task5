@@ -1,22 +1,16 @@
-// import { useState } from "jest-circus"
-// // import { Form } from "react-bootstrap"
+import { Form } from "react-bootstrap"
 
-// const Category = (props) => {
+const Category = (props)  =>{
+      return(
+       <div>
+          <Form.Select aria-label="Default select example" onChange={(event)=>{props.changeCategory(event)}}>
+          <option aria-checked>კატეგორია</option>
+            {props.categoryArr.map((x, i) => (
+              <option key={i} value={i} >{x.title}</option>
+            ))}
+          </Form.Select>
+       </div>
+      )
+}
 
-//     // const [changeCategoryValue, setChangeCategoryValue] = useState('')
-
-//     // const changeCategory = (e) => {
-//     //     setChangeCategoryValue(e.target.value)
-//     // }
-
-//     // return(
-//     //   <Form.Select aria-label="Default select example" onChange={(event)=>{changeCategory(event)}}>
-//     //     {props.categoryArr.map((x, i) => (
-//     //       <option key={i} value={x.title} >{x.title}</option>
-//     //     ))}
-//     //   </Form.Select>
-//     // )
-//     return props.categoryArr.map(x => console.log(x))
-// }
-
-// export default Category
+export default Category

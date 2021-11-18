@@ -1,20 +1,15 @@
-import { useState } from "react"
 import Form from 'react-bootstrap/Form'
 
 const GearType = (props) => {
-
-    const [changeGearTypeValue, setChangeGearTypeValue] = useState('')
-
-    const changeGearType = (e) => {
-        setChangeGearTypeValue(e.target.value)
-      }
-
     return(
-        <Form.Select aria-label="Default select example" onChange={(event)=>{changeGearType(event)}}>
+       <div>
+            <Form.Select aria-label="Default select example" onChange={(event)=>{props.changeGearType(event)}}>
+            <option aria-checked>ტრანსმისია</option>
             {props.gearTypeArr.map((x, i) => (
-                <option key={i} value={x.title} >{x.title}</option>
+                <option key={i} value={i} >{x.title}</option>
             ))}
         </Form.Select>
+       </div>
     )
 }
 
