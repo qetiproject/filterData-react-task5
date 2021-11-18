@@ -2,12 +2,11 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import Form from 'react-bootstrap/Form'
 import { useState, useEffect } from 'react'
 import axios from 'axios';
-import FuelType from './Search/FuelType';
-import GearType from './Search/GearType';
-import Category from './Search/Category';
 import { Container, Row, Col, Button} from 'react-bootstrap';
 import Pagination from './Pagination/Pagination';
 import FilteredData from './Search/FilteredData';
+import { environment } from './enviroments/environment';
+import {FuelType, GearType, Category} from './Search'
 
 const App = () => {
   const [keyword, setKeyword] = useState('')
@@ -16,22 +15,21 @@ const App = () => {
   const [categories, setCategories] = useState([])
   const [currencies, setCurrencies] = useState([])
   const [mileageTypes, setMileageTypes] = useState([])
-  const [wheelTypes, setWheelTypes] = useState([])
   
   const [filteredData, setFilteredData] = useState([])
   const [changeFuelTypesValue, setChangeFuelTypesValue] = useState(0)
   const [changeGearTypeValue, setChangeGearTypeValue] = useState(0)
   const [changeCategoryValue, setChangeCategoryValue] = useState(0)
   const [meta, setMeta] = useState({})
-
   const [error, setError] = useState('')
-
-
   const [currentPage, setCurrentPage] = useState(1);
 
+  const SearchFieldsUrl = environment.SearchFieldsUrl
+  const FilteredDataUrl = environment.FilteredDataUrl
+  
   async function getData ()  {
     try{
-      const response = await axios.get('https://api2.myauto.ge/appdata/other_ka.json')
+      const response = await axios.get(SearchFieldsUrl)
       if(response.data.FuelTypes) {
         setFuelTypes(response.data.FuelTypes.items)
       }      
@@ -47,18 +45,15 @@ const App = () => {
       if(response.data.mileageTypes) {
         setMileageTypes(Object.values(response.data.mileageTypes))
       }
-      if(response.data.WheelTypes){
-        setWheelTypes(response.data.wheelTypes)
-      }
     }
     catch(e) {
       setError(e)
     }
   }
 
-  async function getFilteredData ( page, keyword, fuelType, gearType, category) {
+  async function getFilteredData ( page, keyword) {
     try {
-      const response = await axios.get(`https://api2.myauto.ge/ka/products?TypeID=0&Mans=&CurrencyID=3&MileageType=1&Page=${page}&Keyword=${keyword}&fuelType=${fuelType}&gearType=${gearType}&category=${category}`)
+      const response = await axios.get(`${FilteredDataUrl}?TypeID=0&Mans=&CurrencyID=3&MileageType=1&Page=${page}&Keyword=${keyword}`)
       setFilteredData(response.data.data.items)
       setMeta(response.data.data.meta)
     }
@@ -84,11 +79,8 @@ const App = () => {
   }, [])
 
   const searchData = () => {
-    getFilteredData(currentPage, keyword, changeFuelTypesValue, changeGearTypeValue, changeCategoryValue)
+    getFilteredData(currentPage, keyword)
   }
-
-
-
 
   return (
     <div>
@@ -115,12 +107,16 @@ const App = () => {
           <Button variant="warning" onClick={searchData}>ძებნა</Button>{' '}
         </Container>
       </Form>
-    
-    
-      {/* {filteredData.length > 0 ? ( */}
+      {filteredData.length > 0 ? (
+        <>
         {
+          
           <Pagination
             data={filteredData}
+            gearTypes={gearTypes}
+            currencies={currencies}
+            mileageTypes={mileageTypes}
+            fuelTypes={fuelTypes}
             RenderComponent={FilteredData}
             pageLimit={7}
             dataLimit={meta.per_page}
@@ -130,17 +126,9 @@ const App = () => {
             searchData={searchData}
           />
         }
-      {/* ) : <span>{error}</span>} */}
-      {/* {
-        fuelTypes.length > 0 && (
-          <>
-            <FilteredData
-              fuelTypeArr={fuelTypes}
-              data={filteredData}
-            />
-          </>
-        )
-      } */}
+        </>
+      ) : <span>{error}</span>
+      }
     </div>
   );
 

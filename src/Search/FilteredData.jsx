@@ -1,56 +1,54 @@
 import {Col, Container, Row} from 'react-bootstrap'
 import {Car} from '../Search/search'
-import { useState, useEffect } from 'react';
+import { environment } from '../enviroments/environment';
 
 const FilteredData = (props) => {
     const { 
-      prod_year, engine_volume, fuel_type_id, gear_type_id, car_run_km, right_wheel, price_value, currency_id, car_desc 
+      prod_year, engine_volume, fuel_type_id, gear_type_id, car_run_km, price_value, currency_id, car_desc, photo, car_id 
     } = props.data;
+
+    const CarImgUrl = environment.CarImgUrl
 
     return (
       <Container>
-        {/* {
-          props.fuelTypeArr.map(x => {
-            console.log(props.data.fuel_type_id)
-          //   if(x.fuel_type_id === fuel_type_id) {
-          //     console.log("ggg")
-          //   }
-          // })
-          })
-        
-        } */}
         <Row className="d-flex">
-          <Col md={3}>
+          <Col md={5}>
             <div className="d-flex">
               <Car>
-                Car Name
+                <img src={`${CarImgUrl}/${photo}/thumbs/${car_id}_1.jpg`} alt=""/>
               </Car>
               <p>{prod_year} წ.</p>
             </div>
           </Col>
-          <Col md={3}>
+          <Col md={2}>
             <div className="d-flex flex-column">
-                <span>ძრავი</span>
-                <p>{engine_volume/1000} {fuel_type_id}</p>
+                <span>
+                  <b>ძრავი</b>
+                </span>
+                <p>{engine_volume/1000} 
+                  {props.fuelTypes.filter(fuelType => fuelType.fuel_type_id === fuel_type_id)[0]['title']}
+                </p>
               </div>
               <div className="d-flex flex-column">
-                <span>ტრანსმისია</span>
-                <p>{gear_type_id}</p>
+                <span>
+                  <b>ტრანსმისია</b>
+                </span>
+                <p>{props.gearTypes.filter(gearType => gearType.gear_type_id === gear_type_id)[0]['title']}</p>
             </div>
           </Col>
-          <Col md={3}>
+          <Col md={2}>
             <div className="d-flex flex-column">
-              <span>გარბენი</span>
+              <span>
+                <b>გარბენი</b>
+              </span>
               <p>{car_run_km} კმ</p>
             </div>
-            <div className="d-flex flex-column">
-              <span>საჭე</span>
-              <p>{right_wheel} </p>
-            </div>
           </Col>
-          <Col md={3}>
+          <Col md={2}>
             <span>
-              <b>{price_value} price{currency_id}</b>
+              <b>{price_value/1000} 
+                {props.currencies.filter(currency => currency.currencyID === currency_id)[0]['currencySymbol']}
+              </b>
             </span>
           </Col>
         </Row>

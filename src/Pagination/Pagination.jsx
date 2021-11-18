@@ -1,10 +1,11 @@
 import { useState, useEffect } from "react";
 import './Pagination.css'
 
-const Pagination = ({ data, RenderComponent, pageLimit, dataLimit, meta, setPage, curPage, searchData }) => {
+const Pagination = (
+  { data, RenderComponent, pageLimit, dataLimit, meta, setPage, curPage, searchData, gearTypes, currencies, mileageTypes, fuelTypes }
+) => {
 
     const [pages] = useState(Math.round(meta.total/ dataLimit));
-    // const [currentPage, setCurrentPage] = useState(1);
   
     const goToNextPage = () => {
         setPage((page) => page + 1);
@@ -19,12 +20,6 @@ const Pagination = ({ data, RenderComponent, pageLimit, dataLimit, meta, setPage
         setPage(pageNumber);
     }
   
-    const getPaginatedData = () => {
-        const startIndex = curPage * dataLimit - dataLimit;
-        const endIndex = startIndex + dataLimit;
-        return data.slice(startIndex, endIndex);
-    };
-  
     const getPaginationGroup = () => {
         let start = Math.floor((curPage - 1) / pageLimit) * pageLimit;
         return new Array(pageLimit).fill().map((_, idx) => start + idx + 1);
@@ -33,15 +28,14 @@ const Pagination = ({ data, RenderComponent, pageLimit, dataLimit, meta, setPage
     useEffect(() => {
       searchData()
       window.scrollTo({ behavior: 'smooth', top: '0px' });
-
     }, [curPage]);
 
     return (
       <div className="mt-3 mb-3">
-        {console.log(curPage)}
         <div className="dataContainer">
-          {getPaginatedData().map((d, idx) => (
-            <RenderComponent key={idx} data={d}/>
+          {data.map((d, idx) => (
+            <RenderComponent 
+              gearTypes={gearTypes} currencies={currencies} mileageTypes={mileageTypes} fuelTypes={fuelTypes} key={idx} data={d}/>
           ))}
         </div>
         <div className="pagination">
